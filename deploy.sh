@@ -7,7 +7,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Configure
 MYSQL_ROOT_PASSWORD=""
-MYSQL_NORMAL_USER="estuser"
+MYSQL_NORMAL_USER="commonuser"
 MYSQL_NORMAL_USER_PASSWORD=""
 
 # Check if password is defined
@@ -67,11 +67,11 @@ ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 # Install PHP Stuffs
 
-apt-get install -y --force-yes php7.1-cli php7.1 \
-php7.1-pgsql php7.1-sqlite3 php7.1-gd php7.1-apcu \
-php7.1-curl php7.1-mcrypt \
-php7.1-imap php7.1-mysql php7.1-memcached php7.1-readline php7.1-xdebug \
-php7.1-mbstring php7.1-xml php7.1-zip php7.1-intl php7.1-bcmath
+apt-get install -y --force-yes php5.6-cli php5.6 \
+php5.6-pgsql php5.6-sqlite3 php5.6-gd php5.6-apcu \
+php5.6-curl php5.6-mcrypt \
+php5.6-imap php5.6-mysql php5.6-memcached php5.6-readline php5.6-xdebug \
+php5.6-mbstring php5.6-xml php5.6-zip php5.6-intl php5.6-bcmath
 
 # Install Composer
 
@@ -83,25 +83,25 @@ printf "\nPATH=\"$(composer config -g home 2>/dev/null)/vendor/bin:\$PATH\"\n" |
 
 # Set Some PHP CLI Settings
 
-sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.1/cli/php.ini
-sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.1/cli/php.ini
-sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.1/cli/php.ini
-sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.1/cli/php.ini
+sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/5.6/cli/php.ini
+sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/5.6/cli/php.ini
+sudo sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/5.6/cli/php.ini
+sudo sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/5.6/cli/php.ini
 
 # Install Nginx & PHP-FPM
 
-apt-get install -y --force-yes nginx php7.1-fpm
+apt-get install -y --force-yes nginx php5.6-fpm
 
 # Setup Some PHP-FPM Options
 
-sed -i "s/error_reporting = .*/error_reporting = E_ALL \& ~E_NOTICE \& ~E_STRICT \& ~E_DEPRECATED/" /etc/php/7.1/fpm/php.ini
-sed -i "s/display_errors = .*/display_errors = Off/" /etc/php/7.1/fpm/php.ini
-sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.1/fpm/php.ini
-sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.1/fpm/php.ini
-sed -i "s/upload_max_filesize = .*/upload_max_filesize = 50M/" /etc/php/7.1/fpm/php.ini
-sed -i "s/post_max_size = .*/post_max_size = 50M/" /etc/php/7.1/fpm/php.ini
-sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.1/fpm/php.ini
-sed -i "s/listen =.*/listen = 127.0.0.1:9000/" /etc/php/7.1/fpm/pool.d/www.conf
+sed -i "s/error_reporting = .*/error_reporting = E_ALL \& ~E_NOTICE \& ~E_STRICT \& ~E_DEPRECATED/" /etc/php/5.6/fpm/php.ini
+sed -i "s/display_errors = .*/display_errors = Off/" /etc/php/5.6/fpm/php.ini
+sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/5.6/fpm/php.ini
+sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/5.6/fpm/php.ini
+sed -i "s/upload_max_filesize = .*/upload_max_filesize = 50M/" /etc/php/5.6/fpm/php.ini
+sed -i "s/post_max_size = .*/post_max_size = 50M/" /etc/php/5.6/fpm/php.ini
+sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/5.6/fpm/php.ini
+sed -i "s/listen =.*/listen = 127.0.0.1:9000/" /etc/php/5.6/fpm/pool.d/www.conf
 
 # Setup Some fastcgi_params Options
 
@@ -132,15 +132,15 @@ EOF
 sed -i "s/user www-data;/user www;/" /etc/nginx/nginx.conf
 sed -i "s/# server_names_hash_bucket_size.*/server_names_hash_bucket_size 64;/" /etc/nginx/nginx.conf
 
-sed -i "s/user = www-data/user = www/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/group = www-data/group = www/" /etc/php/7.1/fpm/pool.d/www.conf
+sed -i "s/user = www-data/user = www/" /etc/php/5.6/fpm/pool.d/www.conf
+sed -i "s/group = www-data/group = www/" /etc/php/5.6/fpm/pool.d/www.conf
 
-sed -i "s/listen\.owner.*/listen.owner = www/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/listen\.group.*/listen.group = www/" /etc/php/7.1/fpm/pool.d/www.conf
-sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/7.1/fpm/pool.d/www.conf
+sed -i "s/listen\.owner.*/listen.owner = www/" /etc/php/5.6/fpm/pool.d/www.conf
+sed -i "s/listen\.group.*/listen.group = www/" /etc/php/5.6/fpm/pool.d/www.conf
+sed -i "s/;listen\.mode.*/listen.mode = 0666/" /etc/php/5.6/fpm/pool.d/www.conf
 
 service nginx restart
-service php7.1-fpm restart
+service php5.6-fpm restart
 
 # Install Node
 
